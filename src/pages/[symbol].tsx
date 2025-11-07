@@ -58,18 +58,26 @@ export default function StockDetails() {
         setPrices(priceItems);
       })
       .catch((err) => {
+        console.error(err);
         setError('Failed to load data.');
       })
       .finally(() => setLoading(false));
   }, [symbol]);
 
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Stock Details</h1>
+    <main className="p-8"> 
+      <button
+        onClick={() => router.push('/')}
+        className="mb-6 px-4 py-2 rounded bg-zinc-200 hover:bg-zinc-300 text-base text-zinc-700 transition cursor-pointer"
+        aria-label="Back to homepage"
+      >
+       {"< "}Back to Home
+      </button>
+      <h1 className="text-2xl font-bold mb-4">Stock Details - {symbol}</h1>
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && overview && (
-        <div className="mb-8">
+        <div className="mb-8 border-2 p-4 rounded-2xl">
           <h2 className="text-xl font-semibold mb-2">{overview.Name || 'N/A'} ({overview.Symbol || 'N/A'})</h2>
           <p className="mb-2 text-gray-400">{overview.Description || 'N/A'}</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
