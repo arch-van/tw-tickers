@@ -1,24 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetchCompanyOverview, fetchTimeSeriesDaily } from '@/utils/alphaVantage';
+import type { CompanyOverview, PriceItem } from '@/utils/types';
 
-interface CompanyOverview {
-  Symbol?: string;
-  AssetType?: string;
-  Name?: string;
-  Description?: string;
-  Exchange?: string;
-  Sector?: string;
-  Industry?: string;
-  MarketCapitalization?: string;
-}
-
-interface PriceItem {
-  date: string;
-  close: number;
-  volume: number;
-  percentChange: string;
-}
 
 export default function StockDetails() {
   const router = useRouter();
