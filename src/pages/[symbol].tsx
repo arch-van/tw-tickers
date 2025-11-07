@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { fetchCompanyOverview, fetchTimeSeriesDaily } from '@/utils/alphaVantage';
+import { getLogoUrl } from '@/utils/tickerLogos';
 import type { CompanyOverview, PriceItem } from '@/utils/types';
 
 
@@ -65,15 +66,29 @@ export default function StockDetails() {
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && overview && (
-        <div className="mb-8 border-2 p-4 rounded-2xl">
-          <h2 className="text-xl font-semibold mb-2">{overview.Name || 'N/A'} ({overview.Symbol || 'N/A'})</h2>
-          <p className="mb-2 text-gray-400">{overview.Description || 'N/A'}</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
-            <div><span className="font-semibold">Asset Type:</span> {overview.AssetType || 'N/A'}</div>
-            <div><span className="font-semibold">Exchange:</span> {overview.Exchange || 'N/A'}</div>
-            <div><span className="font-semibold">Sector:</span> {overview.Sector || 'N/A'}</div>
-            <div><span className="font-semibold">Industry:</span> {overview.Industry || 'N/A'}</div>
-            <div><span className="font-semibold">Market Cap:</span> {overview.MarketCapitalization || 'N/A'}</div>
+        <div className="mb-8 border-2 p-4 rounded-2xl flex flex-col md:flex-row items-center gap-6">
+          <img
+            src={getLogoUrl(overview.Symbol || symbol as string)}
+            alt={`${overview.Symbol || symbol} logo`}
+            className="w-20 h-20 object-contain bg-white rounded-full border mb-4 md:mb-0"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              if (!target.src.endsWith('/default-logo.png')) {
+                target.src = '/default-logo.png';
+                target.onerror = null;
+              }
+            }}
+          />
+          <div className="flex-1">
+            <h2 className="text-xl font-semibold mb-2">{overview.Name || 'N/A'} ({overview.Symbol || 'N/A'})</h2>
+            <p className="mb-2 text-gray-400">{overview.Description || 'N/A'}</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+              <div><span className="font-semibold">Asset Type:</span> {overview.AssetType || 'N/A'}</div>
+              <div><span className="font-semibold">Exchange:</span> {overview.Exchange || 'N/A'}</div>
+              <div><span className="font-semibold">Sector:</span> {overview.Sector || 'N/A'}</div>
+              <div><span className="font-semibold">Industry:</span> {overview.Industry || 'N/A'}</div>
+              <div><span className="font-semibold">Market Cap:</span> {overview.MarketCapitalization || 'N/A'}</div>
+            </div>
           </div>
         </div>
       )}
