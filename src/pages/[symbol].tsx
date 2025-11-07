@@ -23,6 +23,10 @@ export default function StockDetails() {
     ])
       .then(([overviewData, priceData]) => {
         setOverview(overviewData);
+
+        if (overviewData.Information) {
+          throw new Error(overviewData.Information);
+        }
         // Parse time series data
         const series = priceData['Time Series (Daily)'] || {};
         const dates = Object.keys(series).sort((a, b) => (a < b ? 1 : -1));
@@ -73,7 +77,7 @@ export default function StockDetails() {
           </div>
         </div>
       )}
-      {!loading && !error && prices.length > 0 && (
+      {!loading && !error && (
         <div>
           <h3 className="text-lg font-semibold mb-2">Historical Prices</h3>
           <div className="overflow-x-auto">
